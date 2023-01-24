@@ -24,17 +24,40 @@ let fruitsJSON = `[
 let fruits = JSON.parse(fruitsJSON);
 
 /*** ОТОБРАЖЕНИЕ ***/
-
+let mapColor = new Map(); // Создание map (неизменного) как эталона для записи цветов
+for (let i = 0; i < fruitsList.children.length; i++) {
+  // Запись значений ("название HTML-класса": "соответствующий ему цвет") для вывода рамки согласно указанного цвета
+  mapColor.set(fruitsList.children[i].className, fruits[i].color);
+  console.log(mapColor);
+  console.log(i);
+}
 // отрисовка карточек
 const display = () => {
   // TODO: очищаем fruitsList от вложенных элементов,
   // чтобы заполнить актуальными данными из fruits
+  while (fruitsList.firstChild) {
+    fruitsList.removeChild(fruitsList.firstChild);
+  }
 
   for (let i = 0; i < fruits.length; i++) {
     // TODO: формируем новый элемент <li> при помощи document.createElement,
     // и добавляем в конец списка fruitsList при помощи document.appendChild
-  }
-};
+      let newElement = document.createElement('li');    
+      for ([key, value] of mapColor) {                
+        if (value == fruits[i].color) {       
+          newElement.className = key;         
+        }
+      }
+      // Добавление в <li> "<div>-элементов" и наполнение их данными
+      newElement.innerHTML = `<div class = "fruit__info">  
+       <div>index: ${i}</div>
+       <div>kind: ${fruits[i].kind}</div>
+       <div>color: ${fruits[i].color}</div>
+       <div>weight(кг): ${fruits[i].weight}</div>
+       </div>`;
+      fruitsList.append(newElement);      // Вывод созданных HTML-элементов <li> с данными
+    }
+  };
 
 // первая отрисовка карточек
 display();
